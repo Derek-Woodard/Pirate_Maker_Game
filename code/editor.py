@@ -32,6 +32,14 @@ class Editor:
 		if not mouse_buttons()[2]:
 			self.pan_active = False
 
+		# mouse wheel
+		if event.type == pygame.MOUSEWHEEL:
+			if pygame.key.get_pressed()[pygame.K_LCTRL]:
+				self.origin.y -= event.y * 50
+			# scroll up/down - check event.y. move mouse wheel left/right check event.x
+			else: 
+				self.origin.x -= event.y * 50
+
 		# panning update
 		if self.pan_active:
 			self.origin = vector(mouse_pos()) - self.pan_offset
