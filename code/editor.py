@@ -36,14 +36,16 @@ class Editor:
 				sys.exit()
 			self.pan_input(event)
 			self.selection_hotkeys(event)
+			self.menu_click(event)
 
 	def pan_input(self,event):
 		# check if middle mouse button is pressed or released
-		# switch to [1] to make middle ouse for non-laptops
-		if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[2]:
+		# switch to [1] to make middle mouse for non-laptops
+		# switch to [2] to use right clock for laptops
+		if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[1]:
 			self.pan_active = True
 			self.pan_offset = vector(mouse_pos()) - self.origin
-		if not mouse_buttons()[2]:
+		if not mouse_buttons()[1]:
 			self.pan_active = False
 
 		# mouse wheel
@@ -66,6 +68,9 @@ class Editor:
 				self.selection_index -= 1
 		self.selection_index = max(2, min(self.selection_index, 18))
 		
+	def menu_click(self, event):
+		if event.type == pygame.MOUSEBUTTONDOWN and self.menu.rect.collidepoint(mouse_pos()):
+			self.selection_index = self.menu.click(mouse_pos(), mouse_buttons())
 
 	# drawing
 	def draw_tile_lines(self):
