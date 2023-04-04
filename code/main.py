@@ -1,5 +1,6 @@
 import pygame
 from settings import *
+from pygame.image import load
 
 from editor import Editor
 
@@ -10,6 +11,12 @@ class Main:
 		self.clock = pygame.time.Clock()
 
 		self.editor = Editor()
+
+		# cursor
+		surf = load('graphics/cursors/mouse.png').convert_alpha()
+		# Cursor(clickable area - which part of the mouse is the point to click at, surface)
+		cursor = pygame.cursors.Cursor((0,0), surf)
+		pygame.mouse.set_cursor(cursor)
 
 	def run(self):
 		while True:
