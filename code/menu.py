@@ -50,16 +50,25 @@ class Menu:
                     sprite.switch()
                 return sprite.get_id()
 
+    def high_light_indicator(self, index):
 
-    def display(self):
-        # pygame.draw.rect(self.display_surface,'red',self.rect)
-        # pygame.draw.rect(self.display_surface,'green',self.tile_button_rect)
-        # pygame.draw.rect(self.display_surface,'blue',self.coin_button_rect)
-        # pygame.draw.rect(self.display_surface,'yellow',self.enemy_button_rect)
-        # pygame.draw.rect(self.display_surface,'orange',self.palm_button_rect)
+        # *** Crash here for unknown reason - to repeat, click on trhe space between any of the four buttons - no error code
+
+        if EDITOR_DATA[index]['menu'] == 'terrain':
+            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.tile_button_rect.inflate(4,4), 5, 4)
+        if EDITOR_DATA[index]['menu'] == 'coin':
+            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.coin_button_rect.inflate(4,4), 5, 4)
+        if EDITOR_DATA[index]['menu'] == 'enemy':
+            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.enemy_button_rect.inflate(4,4), 5, 4)
+        if EDITOR_DATA[index]['menu'] in ('palm bg', 'palm fg'):
+            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.palm_button_rect.inflate(4,4), 5, 4)
+        print(index)
+
+    def display(self, index):
 
         self.buttons.update()
         self.buttons.draw(self.display_surface)
+        self.high_light_indicator(index)
 
 class Button(pygame.sprite.Sprite):
     def __init__(self, rect, group, items, items_alt = None):
