@@ -1,5 +1,7 @@
 import pygame
 from settings import *
+from support import *
+
 from pygame.image import load
 
 from editor import Editor
@@ -9,14 +11,18 @@ class Main:
 		pygame.init()
 		self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 		self.clock = pygame.time.Clock()
+		self.imports()
 
-		self.editor = Editor()
+		self.editor = Editor(self.land_tiles)
 
 		# cursor
 		surf = load('graphics/cursors/mouse.png').convert_alpha()
 		# Cursor(clickable area - which part of the mouse is the point to click at, surface)
 		cursor = pygame.cursors.Cursor((0,0), surf)
 		pygame.mouse.set_cursor(cursor)
+
+	def imports(self):
+		self.land_tiles = import_folder_dict('graphics/terrain/land')
 
 	def run(self):
 		while True:
