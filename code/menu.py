@@ -52,17 +52,17 @@ class Menu:
 
     def high_light_indicator(self, index):
 
-        # *** Crash here for unknown reason - to repeat, click on trhe space between any of the four buttons - no error code
-
-        if EDITOR_DATA[index]['menu'] == 'terrain':
-            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.tile_button_rect.inflate(4,4), 5, 4)
-        if EDITOR_DATA[index]['menu'] == 'coin':
-            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.coin_button_rect.inflate(4,4), 5, 4)
-        if EDITOR_DATA[index]['menu'] == 'enemy':
-            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.enemy_button_rect.inflate(4,4), 5, 4)
-        if EDITOR_DATA[index]['menu'] in ('palm bg', 'palm fg'):
-            pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.palm_button_rect.inflate(4,4), 5, 4)
-        print(index)
+        # *** Crash here for unknown reason - to repeat, click on the space between any of the four buttons - no error code
+        # if added to remove crash - for some reason index becomes none when selecting on the edge of the buttons
+        if index != None:
+            if EDITOR_DATA[index]['menu'] == 'terrain':
+                pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.tile_button_rect.inflate(4,4), 5, 4)
+            if EDITOR_DATA[index]['menu'] == 'coin':
+                pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.coin_button_rect.inflate(4,4), 5, 4)
+            if EDITOR_DATA[index]['menu'] == 'enemy':
+                pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.enemy_button_rect.inflate(4,4), 5, 4)
+            if EDITOR_DATA[index]['menu'] in ('palm bg', 'palm fg'):
+                pygame.draw.rect(self.display_surface, BUTTON_LINE_COLOR, self.palm_button_rect.inflate(4,4), 5, 4)
 
     def display(self, index):
 
