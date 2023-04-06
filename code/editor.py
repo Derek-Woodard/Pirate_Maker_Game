@@ -200,15 +200,19 @@ class Editor:
 
 			# coins
 			if tile.coin:
-				test_surf = pygame.Surface((TILE_SIZE,TILE_SIZE))
-				test_surf.fill('gold')
-				self.display_surface.blit(test_surf, pos)
+				frames = self.animations[tile.coin]['frames']
+				index = int(self.animations[tile.coin]['frame index'])
+				surf = frames[index]
+				rect = surf.get_rect(center = (pos[0] + TILE_SIZE // 2, pos[1] + TILE_SIZE // 2))
+				self.display_surface.blit(surf, rect)
 
 			# enemies
 			if tile.enemy:
-				test_surf = pygame.Surface((TILE_SIZE,TILE_SIZE))
-				test_surf.fill('red')
-				self.display_surface.blit(test_surf, pos)
+				frames = self.animations[tile.enemy]['frames']
+				index = int(self.animations[tile.enemy]['frame index'])
+				surf = frames[index]
+				rect = surf.get_rect(midbottom = (pos[0] + TILE_SIZE // 2, pos[1] + TILE_SIZE))
+				self.display_surface.blit(surf, rect)
 
 	# update
 	def run(self, dt):
