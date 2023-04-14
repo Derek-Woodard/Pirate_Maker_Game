@@ -169,16 +169,24 @@ class Editor:
 	def canvas_add(self):
 		if mouse_buttons()[0] and not self.menu.rect.collidepoint(mouse_pos()) and not self.object_drag_active:
 			current_cell = self.get_current_cell()
+			if EDITOR_DATA[self.selection_index]['type'] == 'tile':
 
-			if current_cell != self.last_selected_cell:
+				if current_cell != self.last_selected_cell:
 
-				if current_cell in self.canvas_data:
-					self.canvas_data[current_cell].add_id(self.selection_index)
-				else:
-					self.canvas_data[current_cell] = CanvasTile(self.selection_index)
+					if current_cell in self.canvas_data:
+						self.canvas_data[current_cell].add_id(self.selection_index)
+					else:
+						self.canvas_data[current_cell] = CanvasTile(self.selection_index)
 
-				self.check_neighbours(current_cell)
-				self.last_selected_cell = current_cell
+					self.check_neighbours(current_cell)
+					self.last_selected_cell = current_cell
+			else: # object
+				CanvasObject(
+					pos = mouse_pos(),
+					frames = self.animations[self.selection_index]['frames'],
+					tile_id = self.selection_index,
+					origin = self.origin,
+					group = self.canvas_objects)
 
 	def canvas_remove(self):
 		if mouse_buttons()[2] and not self.menu.rect.collidepoint(mouse_pos()):
