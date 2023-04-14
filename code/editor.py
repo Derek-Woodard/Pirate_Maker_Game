@@ -36,6 +36,12 @@ class Editor:
 		# menu
 		self.menu = Menu()
 
+		# objects
+		self.canvas_objects = pygame.sprite.Group()
+
+		# player
+		CanvasObject((200, WINDOW_HEIGHT / 2), self.animations[0]['frames'], 0, self.origin, self.canvas_objects)
+
 	# support
 	def get_current_cell(self):
 		distance_to_origin = vector(mouse_pos()) - self.origin
@@ -130,6 +136,9 @@ class Editor:
 		# panning update
 		if self.pan_active:
 			self.origin = vector(mouse_pos()) - self.pan_offset
+
+			for sprite in self.canvas_objects:
+				sprite.pan_pos(self.origin)
 
 	def selection_hotkeys(self, event):
 		if event.type == pygame.KEYDOWN:
@@ -226,6 +235,8 @@ class Editor:
 				surf = frames[index]
 				rect = surf.get_rect(midbottom = (pos[0] + TILE_SIZE // 2, pos[1] + TILE_SIZE))
 				self.display_surface.blit(surf, rect)
+		
+		self.canvas_objects.draw(self.display_surface)
 
 	# update
 	def run(self, dt):
@@ -234,7 +245,7 @@ class Editor:
 
 		# updating
 		self.animation_update(dt)
-
+		self.canvas_objects.update(dt)
 
 		# drawing
 		self.display_surface.fill('white')
@@ -288,6 +299,29 @@ class CanvasTile:
 		if not self.has_terrain and not self.has_water and not self.coin and not self.enemy:
 			self.is_empty = True
 
+class CanvasObject(pygame.sprite.Sprite):
+	def __init__(self, pos, frames, tile_id, origin, group):
+		super().__init__(group)
+
+		# animation
+		self.frames = frames
+		self.frame_index = 0
 
 
+		self.image = self.frames[self.frame_index]
+		self.rect = self.image.get_rect(center = pos)
+
+		# movement
+		self.distance_to_origin = vector(self.rect.topleft) - origin
+
+	def animate(self, dt):
+		self.frame_index += ANIMATION_SPEED * dt
+		self.frame_index = 0 if self.frame_index >= len(self.frames) else self.frame_index
+		self.image = self.frames[int(self.frame_index)]
+
+	def pan_pos(self, origin):
+		self.rect.topleft = origin + self.distance_to_origin
+
+	def update(self, dt):
+		self.animate(dt)
 
