@@ -174,7 +174,7 @@ class Editor:
 				layers['terrain'][(x,y)] = tile.get_terrain() if tile.get_terrain() in self.land_tiles else 'X'
 
 			if tile.coin:
-				layers['coin'][(x + TILE_SIZE // 2,y + TILE_SIZE // 2)] = tile.coin
+				layers['coins'][(x + TILE_SIZE // 2,y + TILE_SIZE // 2)] = tile.coin
 
 			if tile.enemy:
 				layers['enemies'][(x,y)] = tile.enemy
