@@ -48,11 +48,13 @@ class Editor:
 
 		# objects
 		self.canvas_objects = pygame.sprite.Group()
+		self.foreground = pygame.sprite.Group()
+		self.background = pygame.sprite.Group()
 		self.object_drag_active = False
 		self.object_timer = Timer(400)
 
 		# player
-		CanvasObject((200, WINDOW_HEIGHT / 2), self.animations[0]['frames'], 0, self.origin, self.canvas_objects)
+		CanvasObject((200, WINDOW_HEIGHT / 2), self.animations[0]['frames'], 0, self.origin, [self.canvas_objects, self.foreground])
 
 		# sky
 		self.sky_handle = CanvasObject(
@@ -60,7 +62,7 @@ class Editor:
 			frames = [self.sky_handle_surf],
 			tile_id = 1,
 			origin = self.origin,
-			group = self.canvas_objects)
+			group = [self.canvas_objects, self.background])
 
 	# support
 	def get_current_cell(self, obj = None):
@@ -263,12 +265,13 @@ class Editor:
 					self.last_selected_cell = current_cell
 			else: # object
 				if not self.object_timer.active:
+					groups = [self.canvas_objects, self.background] if EDITOR_DATA[self.selection_index]['style'] == 'palm_bg' else [self.canvas_objects ,self.foreground]
 					CanvasObject(
 						pos = mouse_pos(),
 						frames = self.animations[self.selection_index]['frames'],
 						tile_id = self.selection_index,
 						origin = self.origin,
-						group = self.canvas_objects)
+						group = groups)
 					self.object_timer.activate()
 
 	def canvas_remove(self):
@@ -325,6 +328,7 @@ class Editor:
 		self.display_surface.blit(self.support_line_surf,(0,0))
 
 	def draw_level(self):
+		self.background.draw(self.display_surface)
 		for cell_pos, tile in self.canvas_data.items():
 			pos = self.origin + vector(cell_pos) * TILE_SIZE
 
@@ -360,7 +364,7 @@ class Editor:
 				rect = surf.get_rect(midbottom = (pos[0] + TILE_SIZE // 2, pos[1] + TILE_SIZE))
 				self.display_surface.blit(surf, rect)
 		
-		self.canvas_objects.draw(self.display_surface)
+		self.foreground.draw(self.display_surface)
 
 	def preview(self):
 		selected_object = self.mouse_on_object()
